@@ -35,13 +35,20 @@ def get_kv(key):
     else:
         return {"error": "key not found"}
 
-
 def list_kv():
-    result = [val for key,val in in_memory_db.items() if val]
+    result = [val for key, val in in_memory_db.items() if val]
     return result
 
 def filter_kv(filter):
+    global in_memory_db
     result = []
+    for db_key, db_value in in_memory_db.items():
+        for fkey, fvalue in filter.items():
+            if (fkey in db_value):
+                for val in fvalue:
+                    if val == db_value[fkey]:
+                        result.append(value)
+    return result
 
 
 # UUID Generation
@@ -65,10 +72,11 @@ class StudentsView(HTTPMethodView):
 
     # return list of all students
     async def get(self, request):
-        print(request.query_string)
-        print(request.args)
-        #print(raw.args)        
-        return json(list_kv())
+        if request.args:
+            data = filter_kv(request.args)
+        else:
+            data = list_kv()
+        return json(data, status=200)
 
     # create a new student
     async def post(self, request):
