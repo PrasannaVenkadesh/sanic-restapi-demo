@@ -47,7 +47,7 @@ def filter_kv(filter):
             if (fkey in db_value):
                 for val in fvalue:
                     if val == db_value[fkey]:
-                        result.append(value)
+                        result.append(db_value)
     return result
 
 
